@@ -1,9 +1,14 @@
 -- This is my init.lua file
 
-require("user.options")
-require("user.keymaps")
-require("user.plugins")
+local modules = {
+"user.options",
+"user.keymaps",
+"user.plugins"
+}
+
+for k, v in pairs(modules) do
+	package.loaded[v]=nil
+	require(v)
+end
 
 vim.cmd("colorscheme dracula")
-
-

@@ -3,8 +3,9 @@
 local Plug = vim.fn['plug#']
 
 vim.call('plug#begin')
--- The master
+-- Generic
 	Plug 'junegunn/vim-plug'
+	Plug 'folke/which-key.nvim'
 -- Themes/Aesthethic
 	Plug 'Mofiqul/dracula.nvim'
 	Plug 'nvim-lualine/lualine.nvim'
@@ -15,3 +16,4 @@ vim.call('plug#end')
 
 require("plugins.lualine")
 require("plugins.luasnip")
+require("plugins.which-key")

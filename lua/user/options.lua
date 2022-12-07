@@ -2,6 +2,9 @@
 vim.opt.number     = true -- show line numbers
 vim.opt.showmode   = false  -- disable in favor of lualine statusline
 
+vim.opt.tabstop    = 4 -- tab size
+vim.opt.shiftwidth = 4 -- needed for tab size
+
 -- Set powershell as default shell on Windows
 if vim.loop.os_uname()["sysname"] == "Windows_NT" then
 	vim.opt.shell = "powershell.exe"
@@ -12,5 +15,3 @@ if vim.loop.os_uname()["sysname"] == "Windows_NT" then
 	vim.opt.shellquote = ""
 	print("Windows found, switching to Powershell!")
 end
-
-
