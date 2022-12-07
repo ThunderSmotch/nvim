@@ -16,6 +16,9 @@ vim.opt.scrolloff  = 8 -- always keep 8 lines around cursor both ways
 vim.opt.tabstop    = 4 -- tab size
 vim.opt.shiftwidth = 4 -- needed for tab size
 
+-- Spelling languages
+vim.opt.spelllang = "en,pt_pt"
+
 -- Set powershell as default shell on Windows
 if vim.loop.os_uname()["sysname"] == "Windows_NT" then
 	vim.opt.shell = "powershell.exe"
@@ -26,4 +29,3 @@ if vim.loop.os_uname()["sysname"] == "Windows_NT" then
 	vim.opt.shellquote = ""
 	print("Windows found, switching to Powershell!")
 end
-

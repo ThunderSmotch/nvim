@@ -24,6 +24,9 @@ vim.keymap.set("n", "<S-Down>", "<Cmd>m+<CR>", {desc="Move current line down"})
 vim.keymap.set("i", "<S-Up>", "<Cmd>m-2<CR>", {desc="Move current line up"})
 vim.keymap.set("i", "<S-Down>", "<Cmd>m+<CR>", {desc="Move current line down"})
 
+-- Input mode
+vim.keymap.set("i", "<C-l>", "<C-g>u<Esc>[s1z=`]a<C-g>u", {desc="Quick-fix previous spelling error."})
+
 -- 1 oine
 -- 2
 -- 3
