@@ -1,5 +1,9 @@
-set number
+-- This is my init.lua file
 
+vim.cmd("set number")
+
+-- Old code from init.vim
+vim.cmd([[
 let mapleader = '\'
 
 set shell=powershell.exe
@@ -34,3 +38,4 @@ imap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '
 smap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
 
 lua require('config')
+]])
