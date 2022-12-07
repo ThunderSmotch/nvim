@@ -1,7 +1,18 @@
-
-vim.opt.number     = true -- show line numbers
+vim.opt.cursorline = true   -- highlight current line
+vim.opt.number     = true   -- show line numbers
+vim.opt.ruler      = true	-- shows cursor position in current line
 vim.opt.showmode   = false  -- disable in favor of lualine statusline
+vim.opt.incsearch  = false  -- don't jump to search results as search string is being typed
+vim.opt.autowrite  = true   -- write current buffer when moving buffers
+vim.opt.wrap       = true   -- wrap long lines
+vim.opt.linebreak  = true   -- break lines at words
+vim.opt.spell      = true   -- enable spellcheck
+vim.opt.ignorecase = true   -- ignore case in search patterns
+vim.opt.smartcase  = true   -- on search if caps is used then ignores ignorecase
+vim.opt.smartindent= true   -- enable smart indentation on new lines
+vim.opt.undofile   = true   -- enable persistent undos
 
+vim.opt.scrolloff  = 8 -- always keep 8 lines around cursor both ways
 vim.opt.tabstop    = 4 -- tab size
 vim.opt.shiftwidth = 4 -- needed for tab size
 
@@ -15,3 +26,4 @@ if vim.loop.os_uname()["sysname"] == "Windows_NT" then
 	vim.opt.shellquote = ""
 	print("Windows found, switching to Powershell!")
 end
+
