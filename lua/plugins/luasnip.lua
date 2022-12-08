@@ -4,6 +4,8 @@ ls.config.set_config({ -- Setting LuaSnip config
   enable_autosnippets = true, -- Enable autotriggered snippets
   store_selection_keys = "<Tab>", -- Use Tab (or some other key if you prefer) to trigger visual selection
   update_events = 'TextChanged,TextChangedI', -- Update repeated insert nodes on text change instead of insert mode exit
+  delete_check_events = "InsertLeave", -- Update snippet history when leaving InsertMode
+  history = false, -- Do not save snippet history
   store_selection_keys = "<Tab>", -- Use <Tab> (or some other key if you prefer) to trigger visual selection
 })
 
