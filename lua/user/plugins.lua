@@ -6,6 +6,7 @@ vim.call('plug#begin')
 -- Generic
 	Plug 'junegunn/vim-plug'
 	Plug 'folke/which-key.nvim'
+	Plug 'ggandor/leap.nvim'
 -- Themes/Aesthethic
 	Plug 'Mofiqul/dracula.nvim'
 	Plug 'nvim-lualine/lualine.nvim'
@@ -14,6 +15,16 @@ vim.call('plug#begin')
 	Plug 'lervag/vimtex'
 vim.call('plug#end')
 
-require("plugins.lualine")
-require("plugins.luasnip")
-require("plugins.which-key")
+local modules = {
+	"plugins.lualine",
+	"plugins.luasnip",
+	"plugins.which-key",
+	"plugins.leap",
+}
+
+for k, v in pairs(modules) do
+	package.loaded[v]=nil
+	require(v)
+end
+
+
