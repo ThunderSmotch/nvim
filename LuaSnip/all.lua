@@ -65,15 +65,5 @@ s({trig = "tii", dscr = "Expands 'tii' into LaTeX's textit{} command."},
 	  d(1, get_visual),
 	}
   )
-),
--- Make mm expand to $ $ (inline math), but not in words like “comment”, “command”, etc…	
-s({trig = "([^%a])mm", wordTrig = false, regTrig = true},
-  fmta(
-    "<>$<>$",
-    {
-      f( function(_, snip) return snip.captures[1] end ),
-      d(1, get_visual),
-    }
-  )
-),
+), 
 }

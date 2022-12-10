@@ -5,6 +5,19 @@ local get_visual = function(args, parent)
     return sn(nil, i(1, ''))
   end
 end
+--- Below two functions are necessary functions to insert space if the next press is a char
+local if_char_insert_space = function()
+	print("RUN FUNC")
+	if string.find(vim.v.char, "%a") then
+		vim.v.char = " "..vim.v.char
+		return true
+	end
+end
+
+local create_autocmd_for_char_insert_space = function() vim.api.nvim_create_autocmd("InsertCharPre", {
+			callback = if_char_insert_space
+		})
+		end
 
 -- Math context detection
 local tex = {}
@@ -16,20 +29,81 @@ local line_begin = require("luasnip.extras.expand_conditions").line_begin
 -- Return snippets table
 return {
 	-- Generic Environment
-	s({trig="new", snippetType="autosnippet"},
-      fmta([[
-        \begin{<>}
-            <>
-        \end{<>}
-      ]],
-        {
-          i(1),
-          d(2, get_visual),
-          rep(1),
-        }
-      ),
-      {condition = line_begin}
-    ),
---	s({trig="fm", snippetType="snippet"}
---	)
+	s({
+		trig="beg",
+		snippetType="autosnippet",
+		dscr="Generic environment",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\begin{<>}
+			<>	
+		\end{<>}
+
+		]],
+		{i(1), d(2, get_visual), rep(1)}
+		),
+		{condition = line_begin}
+	),
+	-- Inline math
+	s({
+		trig="fm",
+		snippetType="autosnippet",
+		dscr="Inline math",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\( <> \)
+		]],
+		{d(1, get_visual)}
+		),
+		{
+			condition = tex.in_text,
+			callbacks = {[-1] = {[events.leave] = 	create_autocmd_for_char_insert_space}}
+		}
+	),
+	-- Display math
+	s({
+		trig="dm",
+		snippetType="autosnippet",
+		dscr="Display math",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[ 
+		
+		\[ <> \]
+
+		]],
+		{d(1, get_visual)}
+		),
+		{condition = tex.in_text}
+	),
+	-- Figure environment	
+	s({
+		trig="fig",
+		snippetType="autosnippet",
+		dscr="Figure environment",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\textwidth]{<>}
+			\caption{<>}
+			\label{fig:<>}
+		\end{figure}
+
+		]],
+		{
+			i(1, "file"),
+			i(2, "caption"),
+			i(3, "label")
+		}
+		),
+		{condition=line_begin}
+	),
 }
