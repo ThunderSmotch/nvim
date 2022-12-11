@@ -7,7 +7,7 @@ local get_visual = function(args, parent)
 end
 --- Below two functions are necessary functions to insert space if the next press is a char
 local if_char_insert_space = function()
-	print("RUN FUNC")
+--	print("RUN FUNC")
 	if string.find(vim.v.char, "%a") then
 		vim.v.char = " "..vim.v.char
 		return true
