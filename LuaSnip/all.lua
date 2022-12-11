@@ -44,20 +44,24 @@ end
 
 
 return {
-  -- Example: how to set snippet parameters
-  s(
-    { -- Table 1: snippet parameters
-      trig="hi",
-      dscr="An autotriggering snippet that expands 'hi' into 'Hello, world!'",
-      regTrig=false,
-      priority=100,
-      snippetType="autosnippet"
-    },
-    { -- Table 2: snippet nodes (don't worry about this for now---we'll cover nodes shortly)
-      t("Hello, world!"), -- A single text node
-    }
-    -- Table 3, the advanced snippet options, is left blank.
-  ),
+	-- Paired parenthesis
+	s({
+		trig="(",
+		snippetType="autosnippet",
+		dscr="Paired parenthesis",
+		wordTrig=false,
+		regTrig=false,
+	},
+		fmta([[
+		(<>)
+		]],
+		{d(1, get_visual)}
+		),
+		{ }
+	),
+	
+	
+	
   -- Example: italic font implementing visual selection
 s({trig = "tii", dscr = "Expands 'tii' into LaTeX's textit{} command."},
   fmta("\\textit{<>}",

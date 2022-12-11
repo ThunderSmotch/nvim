@@ -6,6 +6,27 @@ local get_visual = function(args, parent)
   end
 end
 
+local get_fraction = function(args, parent)
+	local count = 1
+
+	local cap = parent.snippet.captures[1]
+
+	for i = #cap,1,-1 do
+		local ch = cap:sub(i,i)
+
+		if ch == ")" then count = count + 1
+		elseif ch == "(" then count = count - 1 
+		end
+
+		if count == 0 then 
+			local prev_text = cap:sub(1,i-1)
+			local inside_text = cap:sub(i+1,#cap)
+			return sn(nil, {t(prev_text), t(" \\frac{"..inside_text.."}")})
+		end
+	end
+	return sn(nil, t("ERROR OCCURRED IN SNIPPET"))
+end
+
 -- Math context detection 
 local tex = {}
 tex.in_mathzone = function() return vim.fn['vimtex#syntax#in_mathzone']() == 1 end
@@ -92,7 +113,7 @@ return
 	),
 	-- Integral
 	s({
-		trig="int",
+		trig="dint",
 		snippetType="autosnippet",
 		dscr="Integral",
 		wordTrig=true,
@@ -105,7 +126,54 @@ return
 		),
 		{condition=tex.in_mathzone}
 	),
+	-- Auto subscript
+	s({
+		trig="([a-zA-z])(%d)",
+		snippetType="autosnippet",
+		dscr="Auto subscript with single digit index",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		<>_{<>}
+		]],
+		{f( function(_, snip) return snip.captures[1] end ), 
+		f( function(_, snip) return snip.captures[2] end )}
+		),
+		{condition=tex_in_mathzone}
+	),
+	-- Special Fraction code
+	s({
+		trig="(.*)%)%/",
+		snippetType="autosnippet",
+		dscr="Auto fraction when parenthesis closes",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		<>{<>} 
+		]],
+		{d(1, get_fraction), i(2, "")}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Fraction after text until next space	
+	s({
+		trig="%s([^%s]+)/",
+		snippetType="autosnippet",
+		dscr="Auto fraction with one element",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta(" "..[[
+		<>\frac{<>}{<>}
+		]],
+		{t(" "), f(function(_, snip) return snip.captures[1] end), i(1, "")}
+		),
+		{condition=tex.in_mathzone}
+	),
 	
+
 	-- TODO
 	-- Special fraction after parenthesis
 	-- Sympy
@@ -118,6 +186,9 @@ return
 	-- overline
 	-- hat
 	-- matrix (pmat, bmat, )
+	-- cases
+	-- binomial
+
 
 	-- Static snippets
 	s({
@@ -367,6 +438,34 @@ return
 	},
 		fmta([[
 		\forall 
+		]],
+		{ }
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="+-",
+		snippetType="autosnippet",
+		dscr="Plus or minus",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\pm 
+		]],
+		{ }
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="-+",
+		snippetType="autosnippet",
+		dscr="Minus or plus",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\mp 
 		]],
 		{ }
 		),
