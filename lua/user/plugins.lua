@@ -7,7 +7,6 @@ vim.call('plug#begin')
 	Plug 'junegunn/vim-plug'
 	Plug 'folke/which-key.nvim'
 	Plug 'ggandor/leap.nvim'
-	Plug 'windwp/nvim-autopairs'
 -- Themes/Aesthethic
 	Plug 'Mofiqul/dracula.nvim'
 	Plug 'nvim-lualine/lualine.nvim'
@@ -21,7 +20,6 @@ local modules = {
 	"plugins.luasnip",
 	"plugins.which-key",
 	"plugins.leap",
-	"plugins.autopairs",
 }
 
 for k, v in pairs(modules) do
