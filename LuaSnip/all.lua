@@ -42,6 +42,8 @@ tex_utils.in_tikz = function()  -- TikZ picture environment detection
     return tex_utils.in_env('tikzpicture')
 end
 
+-- TODO
+-- Find a way to delete paired parenthesis
 
 return {
 	-- Paired parenthesis
@@ -59,8 +61,67 @@ return {
 		),
 		{ }
 	),
-	
-	
+	-- Paired curly braces
+	s({
+		trig="{",
+		snippetType="autosnippet",
+		dscr="Paired curly braces",
+		wordTrig=false,
+		regTrig=false,
+	},
+		fmta([[
+		{<>}
+		]],
+		{d(1, get_visual)}
+		),
+		{ }
+	),
+	-- Paired squared braces
+	s({
+		trig="[",
+		snippetType="autosnippet",
+		dscr="Paired squared braces",
+		wordTrig=false,
+		regTrig=false,
+	},
+		fmta([[
+		[<>]
+		]],
+		{d(1, get_visual)}
+		),
+		{ }
+	),
+	-- Paired double quotes
+	s({
+		trig='([ `=%(%{%[])"',
+		snippetType="autosnippet",
+		dscr="Paired double quotes",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		<>"<>"
+		]],
+		{f(function(_, snip) return snip.captures[1] end), d(1, get_visual)}
+		),
+		{options}
+	),
+	-- Paired double quotes
+	s({
+		trig="([ `=%(%{%[])'",
+		snippetType="autosnippet",
+		dscr="Paired double quotes",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		<>'<>'
+		]],
+		{f(function(_, snip) return snip.captures[1] end), d(1, get_visual)}
+		),
+		{options}
+	),
+
 	
   -- Example: italic font implementing visual selection
 s({trig = "tii", dscr = "Expands 'tii' into LaTeX's textit{} command."},

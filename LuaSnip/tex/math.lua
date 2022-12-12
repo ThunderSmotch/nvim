@@ -172,22 +172,109 @@ return
 		),
 		{condition=tex.in_mathzone}
 	),
+	-- Star in superscript
+	s({
+		trig="([%a%)%]%}])%*%*",
+		snippetType="autosnippet",
+		dscr="Star in superscript",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		<>^{*}
+		]],
+		{f(function(_, snip) return snip.captures[1] end )}
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="sum",
+		snippetType="snippet",
+		dscr="Sum operator with sub and superscript",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\sum_{<>}^{<>} 
+		]],
+		{i(1, "i = 0"), i(2, "N")}
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="([^%a%\\])bnn",
+		snippetType="autosnippet",
+		dscr="Binomial",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		<>\binom{<>}{<>} 
+		]],
+		{f(function(_, snip) return snip.captures[1] end), i(1), i(2)}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Limit operator
+	s({
+		trig="lim",
+		snippetType="snippet",
+		dscr="Limit",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\lim_{<> \to <>}
+		]],
+		{i(1, "n"), i(2, "+ \\infty")}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Product operator
+	s({
+		trig="prod",
+		snippetType="snippet",
+		dscr="Product",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\prod_{<>}^{<>} 
+		]],
+		{i(1, "n = 1"), i(2, "+\\infty")}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Partial derivative
+	s({
+		trig="part",
+		snippetType="snippet",
+		dscr="Partial derivative",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\frac{\partial <>}{\partial <>} 
+		]],
+		{i(1), i(2)}
+		),
+		{condition=tex.in_mathzone}
+	),
 	
 
+
 	-- TODO
-	-- Special fraction after parenthesis
+	-- Maybe spaces around operators
 	-- Sympy
 	-- Operators sin/cos/tan/cot/csc/sec
 	-- Operators min max log exp
+	-- Tilde:
 	-- Vec
-	-- Tilde
-	-- Star
 	-- Dot, Ddot
 	-- overline
 	-- hat
 	-- matrix (pmat, bmat, )
 	-- cases
-	-- binomial
 
 
 	-- Static snippets
