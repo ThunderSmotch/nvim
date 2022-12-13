@@ -260,14 +260,11 @@ return
 		),
 		{condition=tex.in_mathzone}
 	),
-	
 
 
 	-- TODO
 	-- Maybe spaces around operators
 	-- Sympy
-	-- Operators sin/cos/tan/cot/csc/sec
-	-- Operators min max log exp
 	-- Tilde:
 	-- Vec
 	-- Dot, Ddot
@@ -558,6 +555,76 @@ return
 		),
 		{condition=tex.in_mathzone}
 	),
-	
+	-- Equiv (left-right-arrow)
+	s({
+		trig="equiv",
+		snippetType="autosnippet",
+		dscr="Equivalent to (left and right arrow version)",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\leftrightarrow 
+		]],
+		{ }
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="uu",
+		snippetType="autosnippet",
+		dscr="Union of two sets",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\cup 
+		]],
+		{ }
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="nn",
+		snippetType="autosnippet",
+		dscr="Intersection of two sets",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\cap 
+		]],
+		{ }
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="UU",
+		snippetType="autosnippet",
+		dscr="Big union of sets",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\bigcup_{<>}  
+		]],
+		{i(1, "a \\in A")}
+		),
+		{condition=tex.in_mathzone}
+	),
+	s({
+		trig="NN",
+		snippetType="autosnippet",
+		dscr="Big intersection of sets",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\bigcap_{<>}  
+		]],
+		{i(1, "a \\in A")}
+		),
+		{condition=tex.in_mathzone}
+	),
 }
 --]==]
