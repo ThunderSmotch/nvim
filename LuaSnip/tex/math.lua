@@ -260,16 +260,101 @@ return
 		),
 		{condition=tex.in_mathzone}
 	),
-
-
+	-- Overline
+	s({
+		trig="([a-zA-Z])bar",
+		snippetType="autosnippet",
+		dscr="Overline letter",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		\overline{<>}
+		]],
+		{f(function(_, snip) return snip.captures[1] end )}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Overline
+	s({
+		trig="bar",
+		snippetType="autosnippet",
+		dscr="Overline command",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\overline{<>}
+		]],
+		{d(1, get_visual)}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Hat
+	s({
+		trig="([a-zA-Z])hat",
+		snippetType="autosnippet",
+		dscr="Hat over letter",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		\hat{<>}
+		]],
+		{f(function(_, snip) return snip.captures[1] end )}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Hat
+	s({
+		trig="hat",
+		snippetType="autosnippet",
+		dscr="Hat command",
+		wordTrig=true,
+		regTrig=false,
+	},
+		fmta([[
+		\hat{<>}
+		]],
+		{d(1, get_visual)}
+		),
+		{condition=tex.in_mathzone}
+	),
+	-- Dot with letter behind
+	s({
+		trig="([a-zA-Z])dot",
+		snippetType="autosnippet",
+		dscr="Dot with letter behind",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		\dot{<>}
+		]],
+		{f(function(_, snip) return snip.captures[1] end)}
+		),
+		{condition=tex.in_mathzone}
+	),	
+	-- DDot with letter behind
+	s({
+		trig="([a-zA-Z])ddot",
+		snippetType="autosnippet",
+		dscr="DDot with letter behind",
+		wordTrig=false,
+		regTrig=true,
+	},
+		fmta([[
+		\ddot{<>}
+		]],
+		{f(function(_, snip) return snip.captures[1] end)}
+		),
+		{condition=tex.in_mathzone}
+	),
 	-- TODO
 	-- Maybe spaces around operators
 	-- Sympy
 	-- Tilde:
 	-- Vec
-	-- Dot, Ddot
-	-- overline
-	-- hat
 	-- matrix (pmat, bmat, )
 	-- cases
 
