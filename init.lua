@@ -12,3 +12,5 @@ for k, v in pairs(modules) do
 end
 
 vim.cmd("colorscheme dracula")
+
+vim.cmd("highlight Conceal guifg=#50fa7b")

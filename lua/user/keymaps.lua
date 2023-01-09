@@ -13,6 +13,11 @@ vim.keymap.set("n", "<Leader>q",
   	end,
 	{desc = "Write and quit if possible/applicable, force quit otherwise"})
 
+vim.keymap.set("i", "<Down>", "<C-o>gj", {silent = true})
+vim.keymap.set("i", "<Up>", "<C-o>gk", {silent = true})
+vim.keymap.set("n", "<Down>", "gj", {silent = true})
+vim.keymap.set("n", "<Up>", "gk", {silent = true})
+
 vim.keymap.set("n", "<Leader>w", "<Cmd>write<CR>", {desc="Write file"})
 vim.keymap.set("n", "<C-z>", "u", {desc="Undo previous change"})
 

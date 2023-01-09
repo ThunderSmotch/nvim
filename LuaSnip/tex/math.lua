@@ -438,7 +438,7 @@ return
 		regTrig=true,
 	},
 		fmta([[
-		<>\noteq 
+		<>\neq 
 		]],
 		{ f( function(_, snip) return snip.captures[1] end )}
 		),
@@ -571,7 +571,7 @@ return
 		{condition=tex.in_mathzone}
 	),
 	s({
-		trig="\\\\",
+		trig="\\\\\\",
 		snippetType="autosnippet",
 		dscr="Setminus",
 		wordTrig=true,
