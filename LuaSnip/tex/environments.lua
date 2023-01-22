@@ -11,6 +11,8 @@ local if_char_insert_space = function()
 	if string.find(vim.v.char, "%a") then
 		vim.v.char = " "..vim.v.char
 		return true
+	elseif string.find(vim.v.char, "[%s%.%,%!%?]") then
+		return true
 	end
 end
 
