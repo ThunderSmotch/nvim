@@ -12,7 +12,7 @@ vim.call('plug#begin')
 	Plug 'Mofiqul/dracula.nvim'
 	Plug 'nvim-lualine/lualine.nvim'
 -- Tex
-	Plug ('L3MON4D3/LuaSnip', {tag = 'v<CurrentMajor>.*'})
+	Plug ('L3MON4D3/LuaSnip', {['tag']='v2.*', ['do']='make install_jsregexp'})
 	Plug 'lervag/vimtex'
 
 

@@ -1,15 +1,6 @@
-local get_visual = function(args, parent)
-  if (#parent.snippet.env.SELECT_RAW > 0) then
-    return sn(nil, i(1, parent.snippet.env.SELECT_RAW))
-  else
-    return sn(nil, i(1, ''))
-  end
-end
-
--- Math context detection 
-local tex = {}
-tex.in_mathzone = function() return vim.fn['vimtex#syntax#in_mathzone']() == 1 end
-tex.in_text = function() return not tex.in_mathzone() end
+local get_visual = lua_snip_utils.get_visual
+local in_mathzone = lua_snip_utils.in_mathzone
+local in_text = lua_snip_utils.in_text
 
 -- Return snippet tables
 return
@@ -23,7 +14,7 @@ return
         d(1, get_visual),
       }
     ),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
     -- LEFT/RIGHT SQUARE BRACES
   s({trig = "([^%a])lr%[", regTrig = true, wordTrig = false, snippetType="autosnippet"},
@@ -34,7 +25,7 @@ return
         d(1, get_visual),
       }
     ),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
   -- LEFT/RIGHT CURLY BRACES
   s({trig = "([^%a])lr%{", regTrig = true, wordTrig = false, snippetType="autosnippet"},
@@ -45,7 +36,7 @@ return
         d(1, get_visual),
       }
     ),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
   -- LEFT/RIGHT ANGLE BRACKETS
   s({
@@ -60,7 +51,7 @@ return
   	]],
   	{f(function(_, snip) return snip.captures[1] end), d(1, get_visual)}
   	),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
     -- LEFT/RIGHT PIPE BRACKETS
   s({
@@ -75,7 +66,7 @@ return
   	]],
   	{f(function(_, snip) return snip.captures[1] end), d(1, get_visual)}
   	),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
   -- LEFT/RIGHT NORM BRACKETS
   s({
@@ -90,7 +81,7 @@ return
   	]],
   	{f(function(_, snip) return snip.captures[1] end), d(1, get_visual)}
   	),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
   -- Ceiling
   s({
@@ -105,7 +96,7 @@ return
   	]],
   	{d(1, get_visual)}
   	),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
   -- Floor
   s({
@@ -120,7 +111,7 @@ return
   	]],
   	{d(1, get_visual)}
   	),
-  	{condition=tex.in_mathzone}
+  	{condition=in_mathzone}
   ),
   
 }

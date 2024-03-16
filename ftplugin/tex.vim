@@ -1,7 +1,7 @@
-" let g:vimtex_view_general_viewer = 'F:\Programs\sioyek-release-windows\sioyek.exe'
-" let g:vimtex_view_general_options = '@pdf --forward-search-file @tex --forward-search-line @line'
+let g:vimtex_view_general_viewer = 'F:\Programs\sioyek-release-windows\sioyek.exe'
+let g:vimtex_view_general_options = '@pdf --forward-search-file @tex --forward-search-line @line --inverse-search "C:\Shortcuts\inverse.bat \"%1\" %2"'
 
-let g:vimtex_view_method = 'sioyek'
+" let g:vimtex_view_method = 'sioyek'
 
 set conceallevel=2
 

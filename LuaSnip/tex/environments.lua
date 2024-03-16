@@ -1,32 +1,13 @@
-local get_visual = function(args, parent)
-  if (#parent.snippet.env.SELECT_RAW > 0) then
-    return sn(nil, i(1, parent.snippet.env.SELECT_RAW))
-  else
-    return sn(nil, i(1, ''))
-  end
-end
---- Below two functions are necessary functions to insert space if the next press is a char
-local if_char_insert_space = function()
---	print("RUN FUNC")
-	if string.find(vim.v.char, "%a") then
-		vim.v.char = " "..vim.v.char
-		return true
-	elseif string.find(vim.v.char, "[%s%.%,%!%?]") then
-		return true
-	end
-end
-
-local create_autocmd_for_char_insert_space = function() vim.api.nvim_create_autocmd("InsertCharPre", {
-			callback = if_char_insert_space
-		})
-		end
-
--- Math context detection
-local tex = {}
-tex.in_mathzone = function() return vim.fn['vimtex#syntax#in_mathzone']() == 1 end
-tex.in_text = function() return not tex.in_mathzone() end
-
+local get_visual = lua_snip_utils.get_visual
 local line_begin = require("luasnip.extras.expand_conditions").line_begin
+local in_mathzone = lua_snip_utils.in_mathzone
+local in_text = lua_snip_utils.in_text
+local insert_space = lua_snip_utils.create_autocmd_for_char_insert_space
+
+local test = function()
+	Print("TESTING")
+	return true
+end
 
 -- Return snippets table
 return {
@@ -62,8 +43,8 @@ return {
 		{d(1, get_visual)}
 		),
 		{
-			condition = tex.in_text,
-			callbacks = {[-1] = {[events.leave] = 	create_autocmd_for_char_insert_space}}
+			condition = in_text,
+			callbacks = {[-1] = {[events.leave] = insert_space}}
 		}
 	),
 	-- Display math
@@ -81,7 +62,7 @@ return {
 		]],
 		{d(1, get_visual)}
 		),
-		{condition = tex.in_text}
+		{condition = in_text}
 	),
 	-- Figure environment	
 	s({

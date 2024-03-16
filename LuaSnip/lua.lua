@@ -5,9 +5,10 @@ return {
 		s({
 			trig="<>",
 			snippetType=<>,
-			dscr="<>",
+			desc="<>",
 			wordTrig=<>,
 			regTrig=<>,
+			trigEngine=<>,
 		},
 			fmta([[
 			<>
@@ -24,9 +25,10 @@ return {
 			i(3, "description"),
 			c(4, {t("true"), t("false")}),
 			c(5, {t("false"), t("true")}),
-			i(6, "expression"),
-			i(7, "nodes"),
-			i(8, "options")
+			c(6, {t("plain"), t("pattern")}),
+			i(7, "expression"),
+			i(8, "nodes"),
+			i(9, "options")
 		}), 
 		{}
 	),

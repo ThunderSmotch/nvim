@@ -1,10 +1,6 @@
-local get_visual = function(args, parent)
-  if (#parent.snippet.env.SELECT_RAW > 0) then
-    return sn(nil, i(1, parent.snippet.env.SELECT_RAW))
-  else
-    return sn(nil, i(1, ''))
-  end
-end
+local get_visual = lua_snip_utils.get_visual
+local in_mathzone = lua_snip_utils.in_mathzone
+local in_text = lua_snip_utils.in_text
 
 local get_fraction = function(args, parent)
 	local count = 1
@@ -27,44 +23,40 @@ local get_fraction = function(args, parent)
 	return sn(nil, t("ERROR OCCURRED IN SNIPPET"))
 end
 
--- Math context detection 
-local tex = {}
-tex.in_mathzone = function() return vim.fn['vimtex#syntax#in_mathzone']() == 1 end
-tex.in_text = function() return not tex.in_mathzone() end
-
 -- Return snippet tables
 return
 {
-
-	-- Superscript math
+		-- Superscript math
 	s({
-		trig="([%w%)%}])%^",
+		trig="([%w%)%}%]%>])%^",
 		snippetType="autosnippet",
 		dscr="Superscript math",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>^{<>}
 		]],
 		{f( function(_, snip) return snip.captures[1] end ), d(1, get_visual)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Subscript math
 	s({
-		trig="([%w%)%}])_",
+		trig="([%w%)%}%]%>])_",
 		snippetType="autosnippet",
 		dscr="Subscript math",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>_{<>}
 		]],
 		{f( function(_, snip) return snip.captures[1] end ), d(1, get_visual)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Fraction
 	s({
@@ -73,13 +65,14 @@ return
 		dscr="Insert fraction",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\frac{<>}{<>} 
 		]],
 		{d(1, get_visual), i(2, "")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Square root
 	s({
@@ -88,28 +81,30 @@ return
 		dscr="Square root",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\sqrt{<>}
 		]],
 		{d(1, get_visual)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Partial derivative
 	s({
-		trig="part",
+		trig="%spart",
 		snippetType="autosnippet",
 		dscr="Fraction with partial derivatives",
-		wordTrig=true,
-		regTrig=false,
+		wordTrig=false,
+		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		\frac{\partial <>}{\partial <>}
 		]],
 		{d(1, get_visual), i(2, 't')}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Integral
 	s({
@@ -118,13 +113,14 @@ return
 		dscr="Integral",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\int_{<>}^{<>} 
 		]],
 		{i(1, "-\\infty"), i(2, "+\\infty")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Auto subscript
 	s({
@@ -133,6 +129,7 @@ return
 		dscr="Auto subscript with single digit index",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>_{<>}
@@ -140,7 +137,7 @@ return
 		{f( function(_, snip) return snip.captures[1] end ), 
 		f( function(_, snip) return snip.captures[2] end )}
 		),
-		{condition=tex_in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Special Fraction code
 	s({
@@ -149,13 +146,14 @@ return
 		dscr="Auto fraction when parenthesis closes",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>{<>} 
 		]],
 		{d(1, get_fraction), i(2, "")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Fraction after text until next space	
 	s({
@@ -164,28 +162,30 @@ return
 		dscr="Auto fraction with one element",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta(" "..[[
 		<>\frac{<>}{<>}
 		]],
 		{t(" "), f(function(_, snip) return snip.captures[1] end), i(1, "")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Star in superscript
 	s({
-		trig="([%a%)%]%}])%*%*",
+		trig="([%a%)%]%}%>])%*%*",
 		snippetType="autosnippet",
 		dscr="Star in superscript",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>^{*}
 		]],
 		{f(function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="sum",
@@ -193,13 +193,14 @@ return
 		dscr="Sum operator with sub and superscript",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\sum_{<>}^{<>} 
 		]],
 		{i(1, "i = 0"), i(2, "N")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="([^%a%\\])bnn",
@@ -207,13 +208,14 @@ return
 		dscr="Binomial",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>\binom{<>}{<>} 
 		]],
 		{f(function(_, snip) return snip.captures[1] end), i(1), i(2)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Limit operator
 	s({
@@ -222,13 +224,14 @@ return
 		dscr="Limit",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\lim_{<> \to <>}
 		]],
 		{i(1, "n"), i(2, "+ \\infty")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Product operator
 	s({
@@ -237,13 +240,14 @@ return
 		dscr="Product",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\prod_{<>}^{<>} 
 		]],
 		{i(1, "n = 1"), i(2, "+\\infty")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Partial derivative
 	s({
@@ -252,13 +256,62 @@ return
 		dscr="Partial derivative",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\frac{\partial <>}{\partial <>} 
 		]],
 		{i(1), i(2)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
+	),	
+	-- Tilde
+	s({
+		trig="([a-zA-Z])%~",
+		snippetType="autosnippet",
+		dscr="Tilde letter",
+		wordTrig=false,
+		regTrig=true,
+		trigEngine = "pattern",
+	},
+		fmta([[
+		\tilde{<>}
+		]],
+		{f(function(_, snip) return snip.captures[1] end )}
+		),
+		{condition=in_mathzone}
+	),
+	-- Vector
+	s({
+		trig="([a-zA-Z])vec",
+		snippetType="autosnippet",
+		dscr="Vector letter",
+		wordTrig=false,
+		regTrig=true,
+		trigEngine = "pattern",
+	},
+		fmta([[
+		\vec{<>}
+		]],
+		{f(function(_, snip) return snip.captures[1] end )}
+		),
+		{condition=in_mathzone}
+	),
+	-- Vector
+	s({
+		trig="vec",
+		snippetType="autosnippet",
+		dscr="Overline command",
+		wordTrig=true,
+		regTrig=false,
+		trigEngine = "plain",
+	},
+		fmta([[
+		\vec{<>}
+		]],
+		{d(1, get_visual)}
+		),
+		{condition=in_mathzone}
 	),
 	-- Overline
 	s({
@@ -267,13 +320,14 @@ return
 		dscr="Overline letter",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		\overline{<>}
 		]],
 		{f(function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Overline
 	s({
@@ -282,13 +336,14 @@ return
 		dscr="Overline command",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\overline{<>}
 		]],
 		{d(1, get_visual)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Hat
 	s({
@@ -297,13 +352,14 @@ return
 		dscr="Hat over letter",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		\hat{<>}
 		]],
 		{f(function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Hat
 	s({
@@ -312,13 +368,14 @@ return
 		dscr="Hat command",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\hat{<>}
 		]],
 		{d(1, get_visual)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Dot with letter behind
 	s({
@@ -327,13 +384,14 @@ return
 		dscr="Dot with letter behind",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		\dot{<>}
 		]],
 		{f(function(_, snip) return snip.captures[1] end)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),	
 	-- DDot with letter behind
 	s({
@@ -342,19 +400,33 @@ return
 		dscr="DDot with letter behind",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		\ddot{<>}
 		]],
 		{f(function(_, snip) return snip.captures[1] end)}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
+	),
+	s({
+		trig="",
+		snippetType="autosnippet",
+		dscr="Bold Mode",
+		wordTrig=true,
+		regTrig=false,
+		trigEngine = "plain",
+	},
+		fmta([[
+		\bm{<>}
+		]],
+		{d(1, get_visual)}
+		),
+		{condition=in_mathzone}
 	),
 	-- TODO
 	-- Maybe spaces around operators
 	-- Sympy
-	-- Tilde:
-	-- Vec
 	-- matrix (pmat, bmat, )
 	-- cases
 
@@ -366,13 +438,14 @@ return
 		dscr="Implies",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\implies 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="=<",
@@ -380,13 +453,14 @@ return
 		dscr="Implied by",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
-		\impliedby
+		\impliedby 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="([^%a\\])iff",
@@ -394,13 +468,14 @@ return
 		dscr="If and only if",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>\iff 
 		]],
 		{f( function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="([^%a\\])in",
@@ -408,27 +483,29 @@ return
 		dscr="Element of",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>\in 
 		]],
 		{f( function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
-		trig="([^%a\\])notin",
+		trig="([^%a\\])nin",
 		snippetType="autosnippet",
 		dscr="Not element of",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>\notin 
 		]],
 		{f( function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="([^%a\\])neq",
@@ -436,13 +513,14 @@ return
 		dscr="Not equal",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>\neq 
 		]],
 		{ f( function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="~=",
@@ -450,13 +528,14 @@ return
 		dscr="Approximately",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\approx 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="~~",
@@ -464,13 +543,14 @@ return
 		dscr="Similar to",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\sim 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig=">=",
@@ -478,13 +558,14 @@ return
 		dscr="Greater or equal to",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\geq 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="<=",
@@ -492,13 +573,14 @@ return
 		dscr="Less or equal to",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\leq 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig=">>",
@@ -506,13 +588,14 @@ return
 		dscr="Much bigger than",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\gg 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="<<",
@@ -520,13 +603,14 @@ return
 		dscr="Much lesser than",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\ll 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="xx",
@@ -534,13 +618,14 @@ return
 		dscr="Operator times",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\times 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="**",
@@ -548,13 +633,14 @@ return
 		dscr="Operator cdot",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\cdot 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="([^%a\\])to",
@@ -562,13 +648,14 @@ return
 		dscr="Arrow to",
 		wordTrig=false,
 		regTrig=true,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		<>\to 
 		]],
 		{ f( function(_, snip) return snip.captures[1] end )}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="\\\\\\",
@@ -576,13 +663,14 @@ return
 		dscr="Setminus",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "pattern",
 	},
 		fmta([[
 		\setminus 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="EE",
@@ -590,13 +678,14 @@ return
 		dscr="There exists",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\exists 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="AA",
@@ -604,13 +693,14 @@ return
 		dscr="For all",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\forall 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="+-",
@@ -618,13 +708,14 @@ return
 		dscr="Plus or minus",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\pm 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="-+",
@@ -632,13 +723,14 @@ return
 		dscr="Minus or plus",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\mp 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	-- Equiv (left-right-arrow)
 	s({
@@ -647,13 +739,14 @@ return
 		dscr="Equivalent to (left and right arrow version)",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\leftrightarrow 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="uu",
@@ -661,13 +754,14 @@ return
 		dscr="Union of two sets",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\cup 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="nn",
@@ -675,13 +769,14 @@ return
 		dscr="Intersection of two sets",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\cap 
 		]],
 		{ }
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="UU",
@@ -689,13 +784,14 @@ return
 		dscr="Big union of sets",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\bigcup_{<>}  
 		]],
 		{i(1, "a \\in A")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
 	),
 	s({
 		trig="NN",
@@ -703,13 +799,59 @@ return
 		dscr="Big intersection of sets",
 		wordTrig=true,
 		regTrig=false,
+		trigEngine = "plain",
 	},
 		fmta([[
 		\bigcap_{<>}  
 		]],
 		{i(1, "a \\in A")}
 		),
-		{condition=tex.in_mathzone}
+		{condition=in_mathzone}
+	),
+	s({
+		trig="oo",
+		snippetType="autosnippet",
+		dscr="Infinity",
+		wordTrig=true,
+		regTrig=false,
+		trigEngine = "plain",
+	},
+		fmta([[
+		\infty
+		]],
+		{}
+		),
+		{condition=in_mathzone}
+	),
+	s({
+		trig=":=",
+		snippetType="autosnippet",
+		dscr="Defined as",
+		wordTrig=true,
+		regTrig=false,
+		trigEngine = "plain",
+	},
+		fmta([[
+		\coloneq 
+		]],
+		{}
+		),
+		{condition=in_mathzone}
+	),
+	s({
+		trig="=:",
+		snippetType="autosnippet",
+		dscr="Defined as",
+		wordTrig=true,
+		regTrig=false,
+		trigEngine = "plain",
+	},
+		fmta([[
+		\coloneq 
+		]],
+		{}
+		),
+		{condition=in_mathzone}
 	),
 }
---]==]
+ 
