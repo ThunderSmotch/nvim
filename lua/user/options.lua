@@ -12,6 +12,8 @@ vim.opt.smartcase  = true   -- on search if caps is used then ignores ignorecase
 vim.opt.smartindent= true   -- enable smart indentation on new lines
 vim.opt.undofile   = true   -- enable persistent undos
 
+vim.opt.completeopt = {"menu", "noinsert", "menuone"}
+
 vim.opt.scrolloff  = 8 -- always keep 8 lines around cursor both ways
 vim.opt.tabstop    = 4 -- tab size
 vim.opt.shiftwidth = 4 -- needed for tab size

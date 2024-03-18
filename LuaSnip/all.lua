@@ -90,14 +90,12 @@ return {
 		),
 		{options}
 	),
-
-	
-  -- Example: italic font implementing visual selection
-s({trig = "tii", dscr = "Expands 'tii' into LaTeX's textit{} command."},
-  fmta("\\textit{<>}",
-	{
-	  d(1, get_visual),
-	}
-  )
-), 
+	s({trig = "today", dscr = "Writes today's date fully."},
+	  fmta("<>",
+		{
+		  extras.partial(os.date, "%A, %d %B %Y"),
+		  --d(1, get_visual),
+		}
+	  )
+	), 
 }

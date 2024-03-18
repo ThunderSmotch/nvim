@@ -11,7 +11,13 @@ let g:vimtex_quickfix_autoclose_after_keystrokes = 1
 
 let g:vimtex_syntax_custom_cmds = [
 \ {'name': 'sum', 'mathmode': 1, 'concealchar': 'Σ'},
+\ {'name': 'urlref', 'cmdre': 'urlref\{.{-}\}', 'conceal': 1, 'concealchar': '☍', 'argstyle': 'bold'},
 \]
 
-" backslash as the leader leader key for `tex` filetype.
+let g:vimtex_syntax_custom_cmds_with_concealed_delims = [
+	  \ {'name': 'ket', 'mathmode': 1, 'cchar_open': '|', 'cchar_close': '>'},
+	  \ {'name': 'binom', 'nargs': 2, 'mathmode': 1, 'cchar_open': '(', 'cchar_mid': '|',  'cchar_close': ')'},
+\]
+
+" backslash as the local leader key for `tex` filetype.
 let maplocalleader = "\\"
