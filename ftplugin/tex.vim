@@ -11,6 +11,7 @@ let g:vimtex_quickfix_autoclose_after_keystrokes = 1
 
 let g:vimtex_syntax_custom_cmds = [
 \ {'name': 'sum', 'mathmode': 1, 'concealchar': 'Σ'},
+\ {'name': 'ind', 'mathmode': 1, 'concealchar': '𝟙'},
 \ {'name': 'urlref', 'cmdre': 'urlref\{.{-}\}', 'conceal': 1, 'concealchar': '☍', 'argstyle': 'bold'},
 \]
 

@@ -32,5 +32,5 @@ vim.keymap.set("i", "<S-Down>", "<Cmd>m+<CR>", {desc="Move current line down"})
 -- Input mode
 vim.keymap.set("i", "<C-l>", "<C-g>u<Esc>[s1z=`]a<C-g>u", {desc="Quick-fix previous spelling error."})
 vim.keymap.set("i", "<CR>", [[pumvisible() ? "<C-y>"  : "<CR>"]], {expr = true, desc="Complete if possible else Tab", noremap=true})
-"vim.keymap.set("i", "<C-Space>", "<C-x><C-o>", {desc="Call Omnicompletion"})
-"vim.keymap.set("i", "<C-@>", "<C-Space>", {desc="Call Omnicompletion"})
+-- vim.keymap.set("i", "<C-Space>", "<C-x><C-o>", {desc="Call Omnicompletion"})
+-- vim.keymap.set("i", "<C-@>", "<C-Space>", {desc="Call Omnicompletion"})
