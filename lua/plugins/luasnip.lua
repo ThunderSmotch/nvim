@@ -145,14 +145,15 @@ local if_char_insert_space = function()
 	--print("RUN FUNC")
 	if string.find(vim.v.char, "[%a%d]") then
 		vim.v.char = " "..vim.v.char
-		return true
-	elseif string.find(vim.v.char, "[%s%.%,%!%?%-]") then
-		return true
 	end
 end
 
+--- Triggering several times. Fixed but not yet live.
+--- https://github.com/L3MON4D3/LuaSnip/issues/1112
 lua_snip_utils.create_autocmd_for_char_insert_space = function() 
 	vim.api.nvim_create_autocmd("InsertCharPre", {
+		buffer = 0,
+		once = true,
 		callback = if_char_insert_space
 	})
 end
