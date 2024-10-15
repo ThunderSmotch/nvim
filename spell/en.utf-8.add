@@ -42,3 +42,6 @@ MCMC
 MLP
 ELBO
 Kullback-Leibler
+Haar
+softmax
+logits
